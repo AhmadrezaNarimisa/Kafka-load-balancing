@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: kafka-load-balancing
+  kafka:
+    consumer:
+      group-id: billing
+
+kafka:
+  clusters:
+    primary:
+      bootstrap-servers: localhost:9092
+    secondary:
+      bootstrap-servers: localhost:9094
+  topic:
+    name: orders-topic
+    partitions: 6
+    replicas: 1
+
+app:
+  instance-id: ${INSTANCE_ID:instance-1}
+  consume-from: primary
+  listener-concurrency: 1
+
+logging:
+  pattern:
+    level: "%5p [${app.instance-id},%X{traceId:-}]"
